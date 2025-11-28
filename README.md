@@ -36,6 +36,7 @@ handler = logging_loki.LokiHandler(
     tags={"application": "my-app"},
     auth=("username", "password"),
     version="2",
+    verify_ssl=True
 )
 
 logger = logging.getLogger("my-logger")
@@ -68,6 +69,7 @@ handler_loki = logging_loki.LokiHandler(
     tags={"application": "my-app"},
     auth=("username", "password"),
     version="2",
+    verify_ssl=True
 )
 logging.handlers.QueueListener(queue, handler_loki)
 
@@ -90,6 +92,7 @@ handler = logging_loki.LokiQueueHandler(
     tags={"application": "my-app"},
     auth=("username", "password"),
     version="2",
+    verify_ssl=True
 )
 
 logger = logging.getLogger("my-logger")

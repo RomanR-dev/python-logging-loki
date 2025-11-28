@@ -43,7 +43,8 @@ class LokiHandler(logging.Handler):
         tags: Optional[dict] = None,
         auth: Optional[emitter.BasicAuth] = None,
         version: Optional[str] = None,
-        headers: Optional[dict] = None
+        headers: Optional[dict] = None,
+        verify_ssl: bool = True
     ):
         """
         Create new Loki logging handler.
@@ -53,6 +54,7 @@ class LokiHandler(logging.Handler):
             tags: Default tags added to every log record.
             auth: Optional tuple with username and password for basic HTTP authentication.
             version: Version of Loki emitter to use.
+            verify_ssl: If set to False, the endpoint's SSL certificates are not verified
 
         """
         super().__init__()
@@ -69,7 +71,7 @@ class LokiHandler(logging.Handler):
         version = version or const.emitter_ver
         if version not in self.emitters:
             raise ValueError("Unknown emitter version: {0}".format(version))
-        self.emitter = self.emitters[version](url, tags, auth, headers)
+        self.emitter = self.emitters[version](url, tags, auth, headers, verify_ssl)
 
     def handleError(self, record):  # noqa: N802
         """Close emitter and let default handler take actions on error."""
