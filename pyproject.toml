@@ -1,3 +1,39 @@
 [build-system]
 requires = ["setuptools >= 40.0.0"]
 build-backend = "setuptools.build_meta"
+
+
+[tool.ruff]
+line-length = 200
+
+[tool.ruff.lint]
+# Enable flake8-style rules and more
+# You can customize this based on wemake-python-styleguide rules you want
+select = [
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "F",    # pyflakes
+    "I",    # isort
+    "N",    # pep8-naming
+    "UP",   # pyupgrade
+    "B",    # flake8-bugbear
+    "C4",   # flake8-comprehensions
+    "SIM",  # flake8-simplify
+]
+
+# Ignore specific rules if needed
+ignore = [
+    "UP009",  # UTF-8 encoding declaration is unnecessary
+    "UP035",  # typing.X is deprecated, use x instead
+    "UP006",  # Use x instead of X for type annotation
+    "UP030",  # Use implicit references for positional format fields
+    "UP032",  # Use f-string instead of format call
+    "UP015",  # Unnecessary mode argument
+    "UP045",  # New union syntax
+    "B019",   # Use of functools.lru_cache on methods can lead to memory leaks
+    "B028",   # No explicit stacklevel keyword argument found
+]
+
+[tool.ruff.format]
+# Use double quotes (ruff default, similar to black)
+quote-style = "double"

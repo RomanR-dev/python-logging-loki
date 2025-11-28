@@ -2,13 +2,13 @@
 
 import setuptools
 
-with open("README.md", "r") as fh:
+with open("README.md", encoding="utf-8") as fh:
     long_description = fh.read()
 
 setuptools.setup(
     name="python-logging-loki-v2",
-    version="0.4.4",
-    description="Python logging handler for Grafana Loki, with support to headers.",
+    version="1.0.0",
+    description="Python logging handler for Grafana Loki",
     long_description=long_description,
     long_description_content_type="text/markdown",
     license="MIT",
@@ -16,7 +16,7 @@ setuptools.setup(
     author_email="cryos10@gmail.com",
     url="https://github.com/RomanR-dev/python-logging-loki",
     packages=setuptools.find_packages(exclude=("tests",)),
-    python_requires=">=3.6",
+    python_requires=">=3.11",
     install_requires=["rfc3339>=6.1", "requests"],
     classifiers=[
         "Development Status :: 4 - Beta",

@@ -1,101 +1,120 @@
-## python-logging-loki-v2
+# 🚀 python-logging-loki-v2
 
-# [Based on: https://github.com/GreyZmeem/python-logging-loki.]
-===================
+> Modern Python logging handler for Grafana Loki
 
 [![PyPI version](https://img.shields.io/pypi/v/python-logging-loki-v2.svg)](https://pypi.org/project/python-logging-loki-v2/)
-[![Python version](https://img.shields.io/badge/python-3.6%20%7C%203.7%20%7C%203.8-blue.svg)](https://www.python.org/)
-[![License](https://img.shields.io/pypi/l/python-logging-loki.svg)](https://opensource.org/licenses/MIT)
+[![Python](https://img.shields.io/badge/python-3.9+-blue.svg)](https://www.python.org/)
 
-[//]: # ([![Build Status]&#40;https://travis-ci.org/GreyZmeem/python-logging-loki.svg?branch=master&#41;]&#40;https://travis-ci.org/GreyZmeem/python-logging-loki&#41;)
+Send Python logs directly to [Grafana Loki](https://grafana.com/loki) with minimal configuration.
 
-Python logging handler for Loki.
-https://grafana.com/loki
+---
 
-New
-===========
-0.4.0: support to headers (ability to pass tenants for multi tenant loki configuration)
+## ✨ Features
 
+- 📤 **Direct Integration** - Send logs straight to Loki
+- 🔐 **Authentication Support** - Basic auth and custom headers
+- 🏷️ **Custom Labels** - Flexible tagging system
+- ⚡ **Async Support** - Non-blocking queue handler included
+- 🔒 **SSL Verification** - Configurable SSL/TLS settings
+- 🎯 **Multi-tenant** - Support for Loki multi-tenancy
 
-Installation
-============
+---
+
+## 📦 Installation
+
 ```bash
 pip install python-logging-loki-v2
 ```
 
-Usage
-=====
+---
+
+## 🎯 Quick Start
+
+### Basic Usage
 
 ```python
 import logging
 import logging_loki
 
-
 handler = logging_loki.LokiHandler(
-    url="https://my-loki-instance/loki/api/v1/push", 
-    tags={"application": "my-app"},
+    url="https://loki.example.com/loki/api/v1/push",
+    tags={"app": "my-application"},
     auth=("username", "password"),
-    version="2",
-    verify_ssl=True
+    version="2"
 )
 
-logger = logging.getLogger("my-logger")
+logger = logging.getLogger("my-app")
 logger.addHandler(handler)
-logger.error(
-    "Something happened", 
-    extra={"tags": {"service": "my-service"}},
-)
+logger.info("Application started", extra={"tags": {"env": "production"}})
 ```
 
-Example above will send `Something happened` message along with these labels:
-- Default labels from handler
-- Message level as `serverity`
-- Logger's name as `logger` 
-- Labels from `tags` item of `extra` dict
+### Async/Non-blocking Mode
 
-The given example is blocking (i.e. each call will wait for the message to be sent).  
-But you can use the built-in `QueueHandler` and` QueueListener` to send messages in a separate thread.  
+For high-throughput applications, use the queue handler to avoid blocking:
 
 ```python
 import logging.handlers
 import logging_loki
 from multiprocessing import Queue
-
-
-queue = Queue(-1)
-handler = logging.handlers.QueueHandler(queue)
-handler_loki = logging_loki.LokiHandler(
-    url="https://my-loki-instance/loki/api/v1/push", 
-    tags={"application": "my-app"},
-    auth=("username", "password"),
-    version="2",
-    verify_ssl=True
-)
-logging.handlers.QueueListener(queue, handler_loki)
-
-logger = logging.getLogger("my-logger")
-logger.addHandler(handler)
-logger.error(...)
-```
-
-Or you can use `LokiQueueHandler` shortcut, which will automatically create listener and handler.
-
-```python
-import logging.handlers
-import logging_loki
-from multiprocessing import Queue
-
 
 handler = logging_loki.LokiQueueHandler(
     Queue(-1),
-    url="https://my-loki-instance/loki/api/v1/push", 
-    tags={"application": "my-app"},
-    auth=("username", "password"),
-    version="2",
-    verify_ssl=True
+    url="https://loki.example.com/loki/api/v1/push",
+    tags={"app": "my-application"},
+    version="2"
 )
 
-logger = logging.getLogger("my-logger")
+logger = logging.getLogger("my-app")
 logger.addHandler(handler)
-logger.error(...)
+logger.info("Non-blocking log message")
 ```
+
+---
+
+## ⚙️ Configuration Options
+
+| Parameter | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `url` | `str` | *required* | Loki push endpoint URL |
+| `tags` | `dict` | `{}` | Default labels for all logs |
+| `auth` | `tuple` | `None` | Basic auth credentials `(username, password)` |
+| `headers` | `dict` | `None` | Custom HTTP headers (e.g., for multi-tenancy) |
+| `version` | `str` | `"1"` | Loki API version (`"0"`, `"1"`, or `"2"`) |
+| `verify_ssl` | `bool` | `True` | Enable/disable SSL certificate verification |
+
+---
+
+## 🏷️ Labels
+
+Logs are automatically labeled with:
+- **severity** - Log level (INFO, ERROR, etc.)
+- **logger** - Logger name
+- **Custom tags** - From handler and `extra={"tags": {...}}`
+
+```python
+logger.error(
+    "Database connection failed",
+    extra={"tags": {"service": "api", "region": "us-east"}}
+)
+```
+
+---
+
+## 🔐 Multi-tenant Setup
+
+```python
+handler = logging_loki.LokiHandler(
+    url="https://loki.example.com/loki/api/v1/push",
+    headers={"X-Scope-OrgID": "tenant-1"},
+    tags={"app": "my-app"}
+)
+```
+
+---
+Based on [python-logging-loki](https://github.com/GreyZmeem/python-logging-loki) by GreyZmeem.
+
+### Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+---
