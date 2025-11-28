@@ -2,15 +2,11 @@
 
 import logging
 import warnings
-from logging.handlers import QueueHandler
-from logging.handlers import QueueListener
+from logging.handlers import QueueHandler, QueueListener
 from queue import Queue
-from typing import Dict
-from typing import Optional
-from typing import Type
+from typing import Dict, Type
 
-from logging_loki import const
-from logging_loki import emitter
+from logging_loki import const, emitter
 
 
 class LokiQueueHandler(QueueHandler):
@@ -19,7 +15,7 @@ class LokiQueueHandler(QueueHandler):
     def __init__(self, queue: Queue, **kwargs):
         """Create new logger handler with the specified queue and kwargs for the `LokiHandler`."""
         super().__init__(queue)
-        self.handler = LokiHandler(**kwargs)  # noqa: WPS110
+        self.handler = LokiHandler(**kwargs)
         self.listener = QueueListener(self.queue, self.handler)
         self.listener.start()
 
@@ -31,21 +27,9 @@ class LokiHandler(logging.Handler):
     `Loki API <https://github.com/grafana/loki/blob/master/docs/api.md>`_
     """
 
-    emitters: Dict[str, Type[emitter.LokiEmitter]] = {
-        "0": emitter.LokiEmitterV0,
-        "1": emitter.LokiEmitterV1,
-        "2": emitter.LokiEmitterV2
-    }
+    emitters: Dict[str, Type[emitter.LokiEmitter]] = {"0": emitter.LokiEmitterV0, "1": emitter.LokiEmitterV1, "2": emitter.LokiEmitterV2}
 
-    def __init__(
-        self,
-        url: str,
-        tags: Optional[dict] = None,
-        auth: Optional[emitter.BasicAuth] = None,
-        version: Optional[str] = None,
-        headers: Optional[dict] = None,
-        verify_ssl: bool = True
-    ):
+    def __init__(self, url: str, tags: dict | None = None, auth: emitter.BasicAuth | None = None, version: str | None = None, headers: dict | None = None, verify_ssl: bool = True):
         """
         Create new Loki logging handler.
 

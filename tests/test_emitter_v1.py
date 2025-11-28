@@ -152,7 +152,7 @@ def test_session_is_closed(emitter_v1):
     emitter(create_record(), "")
     emitter.close()
     session().close.assert_called_once()
-    assert emitter._session is None  # noqa: WPS437
+    assert emitter._session is None
 
 
 def test_can_build_tags_from_converting_dict(emitter_v1):

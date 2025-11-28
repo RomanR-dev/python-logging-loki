@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 
 import logging
-
 from typing import Tuple
 from unittest.mock import MagicMock
 
@@ -12,12 +11,12 @@ from logging_loki.emitter import LokiEmitterV2
 emitter_url: str = "https://example.net/loki/api/v1/push/"
 headers = {"X-Scope-OrgID": "some_tenant"}
 record_kwargs = {
-    "name"    : "test",
-    "level"   : logging.WARNING,
-    "fn"      : "",
-    "lno"     : "",
-    "msg"     : "Test",
-    "args"    : None,
+    "name": "test",
+    "level": logging.WARNING,
+    "fn": "",
+    "lno": "",
+    "msg": "Test",
+    "args": None,
     "exc_info": None,
 }
 
@@ -84,9 +83,9 @@ def test_default_tags_added_to_payload(emitter_v2):
     stream = get_stream(session)
     level = logging.getLevelName(record_kwargs["level"]).lower()
     expected = {
-        emitter.level_tag : level,
+        emitter.level_tag: level,
         emitter.logger_tag: record_kwargs["name"],
-        "app"             : "emitter",
+        "app": "emitter",
     }
     assert stream["stream"] == expected
 
@@ -97,7 +96,7 @@ def test_headers_added(emitter_v2):
     emitter(create_record(), "")
 
     kwargs = get_request(session)
-    assert kwargs['headers']['X-Scope-OrgID'] == headers['X-Scope-OrgID']
+    assert kwargs["headers"]["X-Scope-OrgID"] == headers["X-Scope-OrgID"]
 
 
 def test_no_headers_added(emitter_v2_no_headers):
@@ -106,11 +105,12 @@ def test_no_headers_added(emitter_v2_no_headers):
     emitter(create_record(), "")
 
     kwargs = get_request(session)
-    assert kwargs['headers'] is not None and kwargs['headers'] == {}
+    assert kwargs["headers"] is not None and kwargs["headers"] == {}
 
 
 def test_soemthing_fun():
     import os
+
     a = "a"
     b = "b"
     c = "/c"
