@@ -44,7 +44,7 @@ class LokiEmitter(abc.ABC):
         self.auth = auth
         #: Optional headers for post request
         self.headers = headers or {}
-        #: Verfify the host's ssl certificate
+        #: Verify the host's ssl certificate
         self.verify_ssl = verify_ssl
 
         self._session: requests.Session | None = None
@@ -149,8 +149,8 @@ class LokiEmitterV2(LokiEmitterV1):
     Enables passing additional headers to requests
     """
 
-    def __init__(self, url: str, tags: dict | None = None, auth: BasicAuth = None, headers: dict = None):
-        super().__init__(url, tags, auth, headers)
+    def __init__(self, url: str, tags: dict | None = None, auth: BasicAuth = None, headers: dict = None, verify_ssl: bool = True):
+        super().__init__(url, tags, auth, headers, verify_ssl)
 
     def __call__(self, record: logging.LogRecord, line: str):
         """Send log record to Loki."""

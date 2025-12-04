@@ -35,6 +35,12 @@ def emitter_v2() -> Tuple[LokiEmitterV2, MagicMock]:
     return instance, session
 
 
+def test_init():
+    LokiEmitterV2(url=emitter_url, headers=headers)
+    LokiEmitterV2(url=emitter_url, headers=headers, tags={})
+    LokiEmitterV2(url=emitter_url, headers=headers, tags={}, verify_ssl=True)
+
+
 @pytest.fixture()
 def emitter_v2_no_headers() -> Tuple[LokiEmitterV2, MagicMock]:
     """Create v2 emitter with mocked http session."""
