@@ -7,7 +7,7 @@ with open("README.md", encoding="utf-8") as fh:
 
 setuptools.setup(
     name="python-logging-loki-v2",
-    version="1.1.0",
+    version="1.1.1",
     description="Python logging handler for Grafana Loki",
     long_description=long_description,
     long_description_content_type="text/markdown",
@@ -19,7 +19,7 @@ setuptools.setup(
     python_requires=">=3.11",
     install_requires=["rfc3339>=6.1", "requests"],
     classifiers=[
-        "Development Status :: 4 - Release",
+        "Development Status :: 5 - Production/Stable",
         "Intended Audience :: Developers",
         "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
